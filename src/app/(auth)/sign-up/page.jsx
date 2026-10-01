@@ -9,10 +9,18 @@ import {
   Input,
   Label,
   TextField,
+  InputGroup,
 } from "@heroui/react";
+import { Eye, EyeSlash } from "@gravity-ui/icons";
+import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignUp() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const router = useRouter();
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,19 +34,21 @@ export default function SignUp() {
       callbackURL: "/",
     });
 
+    router.push("/");
+
     console.log("Form submitted data:", resData, error);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-indigo-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-indigo-100 flex justify-center px-4">
+      <div className="w-full max-w-md mt-5">
         {/* Card */}
-        <div className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-2xl shadow-indigo-200/40 backdrop-blur-xl sm:p-8">
+        <div className="rounded-3xl border border-gray-300/70 bg-white/80 p-6 shadow-2xl shadow-indigo-200/40 backdrop-blur-xl sm:p-8">
           {/* Header */}
-          <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-200">
+          <div className="mb-5 text-center">
+            {/* <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-200">
               B
-            </div>
+            </div> */}
 
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
               Create Account
@@ -134,10 +144,33 @@ export default function SignUp() {
                 Password
               </Label>
 
-              <Input
-                placeholder="Enter your password"
-                className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
-              />
+              {/* Password Input + Eye */}
+              <InputGroup className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-500/10">
+                <InputGroup.Input
+                  name="password"
+                  type={isVisible ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="h-full w-full border-0 bg-transparent px-4 text-slate-900 outline-none focus:ring-0"
+                />
+
+                <InputGroup.Suffix className="pe-2">
+                  <Button
+                    type="button"
+                    isIconOnly
+                    aria-label={isVisible ? "Hide password" : "Show password"}
+                    size="sm"
+                    variant="ghost"
+                    onPress={() => setIsVisible((prev) => !prev)}
+                    className="text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+                  >
+                    {isVisible ? (
+                      <Eye className="size-4" />
+                    ) : (
+                      <EyeSlash className="size-4" />
+                    )}
+                  </Button>
+                </InputGroup.Suffix>
+              </InputGroup>
 
               <Description className="mt-2 text-xs leading-5 text-slate-400">
                 At least 8 characters with 1 uppercase letter and 1 number.
